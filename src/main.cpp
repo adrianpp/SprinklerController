@@ -11,8 +11,9 @@ int main()
 	crow::SimpleApp app;
     app.loglevel(crow::LogLevel::Info);
 	crow::mustache::set_base(".");
+	constexpr int NUM_ZONES = 4;
 	
-	SimpleSchedule<4> schedule{"front_main","front_side","rear1","rear2"};
+	SimpleSchedule<NUM_ZONES> schedule{"front_main","front_side","rear1","rear2"};
 	schedule.setRouting(app);
 
 	CROW_ROUTE(app, "/")
@@ -24,8 +25,8 @@ int main()
         return crow::mustache::load("default.html").render(ctx);
     });
 	std::thread t1([&](){
-		bool was_running[4] = {false};
-		[[maybe_unused]] const int pin_num[4] = {0,1,2,3};
+		bool was_running[NUM_ZONES] = {false};
+		[[maybe_unused]] const int pin_num[NUM_ZONES] = {0,1,2,3};
 		while(true) {
 			int i = 0;
 			for(auto& S : schedule.settings)
