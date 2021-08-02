@@ -1,3 +1,6 @@
+# generated folders
+/build
+
 # vim swap fiel
 *.swp
 

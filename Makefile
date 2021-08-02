@@ -5,7 +5,7 @@ BUILD    := ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET   := sprinkler_controller
-INCLUDE  := -Iinclude/
+INCLUDE  := -Iinclude/ -Icrow/include/
 SRC      :=                      \
 	$(wildcard src/*.cpp)
 

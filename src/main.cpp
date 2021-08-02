@@ -1,70 +1,25 @@
 #define CROW_MAIN
 #include "crow/mustache.h"
 #include "crow/app.h"
-
-struct TimeSchedule {
-	int hour; //24 hour time, starting at midnight
-	int minute;
-	std::string toTwoDigitTime(int n)
-	{
-		std::string ret;
-		if( n < 10 )
-			ret += "0";
-		ret += std::to_string(n);
-		return ret;
-	}
-	crow::json::wvalue toJSON()
-	{
-		crow::json::wvalue ret;
-		ret["hour"] = toTwoDigitTime(hour);
-		ret["minute"] = toTwoDigitTime(minute);
-		return ret;
-	}
-	bool operator < (const TimeSchedule& rhs) const
-	{
-		if( hour < rhs.hour ) return true;
-		if( hour > rhs.hour ) return false;
-		//hour == rhs.hour at this point
-		return( minute < rhs.minute );
-	}
-	bool operator == (const TimeSchedule& rhs) const
-	{
-		return (hour == rhs.hour) and (minute == rhs.minute);
-	}
-	bool operator <= (const TimeSchedule& rhs) const
-	{
-		return (*this == rhs) or (*this < rhs);
-	}
-	friend std::ostream& operator << (std::ostream& os, const TimeSchedule& rhs)
-	{
-		os << rhs.hour << ":" << rhs.minute;
-		return os;
-	}
-};
-
-TimeSchedule operator + (const TimeSchedule& lhs, const TimeSchedule& rhs)
-{
-	auto hour = lhs.hour + rhs.hour;
-	auto minute = lhs.minute + rhs.minute;
-	hour += minute / 60;
-	minute %= 60;
-	hour %= 24;
-	return {hour,minute};
-}
-
-bool isBetween(TimeSchedule start, TimeSchedule cur, TimeSchedule end)
-{
-	if( start <= end )
-	{
-		return (start <= cur and cur < end);
-	}
-	else //crosses 24-hour boundary
-	{
-		return isBetween(start, cur, {24,0}) or isBetween({0,0}, cur, end);
-	}
-}
-
+#include "TimeSchedule.hh"
 #include <chrono>
+#include <string>
+
+std::string toTwoDigitTime(int n)
+{
+	std::string ret;
+	if( n < 10 )
+		ret += "0";
+	ret += std::to_string(n);
+	return ret;
+}
+crow::json::wvalue toJSON(const TimeSchedule& rhs)
+{
+	crow::json::wvalue ret;
+	ret["hour"] = toTwoDigitTime(rhs.hour);
+	ret["minute"] = toTwoDigitTime(rhs.minute);
+	return ret;
+}
 
 struct SimpleSchedule {
 	using Duration = TimeSchedule;
@@ -125,8 +80,8 @@ struct SimpleSchedule {
 		    ([&](){
 				crow::json::wvalue ret;
 				ret["enabled"] = enabled;
-				ret["duration"] = duration.toJSON();
-				ret["start_time"] = start_time.toJSON();
+				ret["duration"] = toJSON(duration);
+				ret["start_time"] = toJSON(start_time);
 				ret["running"] = shouldActivate();
 				return ret;
 			});
