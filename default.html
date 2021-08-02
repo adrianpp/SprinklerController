@@ -63,6 +63,12 @@
 						}
 						$('#'+zone+'_duration_hour').prop('value', data.duration.hour);
 						$('#'+zone+'_duration_minute').prop('value', data.duration.minute);
+						if( data.manual )
+							$('#'+zone+'_running').html('Manually Running');
+						else if( data.running )
+							$('#'+zone+'_running').html('Running');
+						else
+							$('#'+zone+'_running').html('Not Running');
 						if( data.running )
 							$('#'+zone+'_running').css('color', 'green');
 						else

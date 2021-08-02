@@ -61,6 +61,7 @@ void SimpleSetting::setRouting(crow::SimpleApp& app)
 		 ret["duration"] = toJSON(duration);
 		 ret["start_time"] = toJSON(start_time);
 		 ret["running"] = shouldActivate();
+		 ret["manual"] = manually_running;
 		 return ret;
 		 });
 	app.route_dynamic("/"+zone_name+"/toggle_enabled")
