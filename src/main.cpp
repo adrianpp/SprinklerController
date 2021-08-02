@@ -31,7 +31,7 @@ int main()
 			int i = 0;
 			for(auto& S : schedule.settings)
 			{
-				if( was_running[i] and S.shouldDeactivate() )
+				if( was_running[i] and !S.shouldActivate() )
 				{
 					CROW_LOG_INFO << "Turning off zone " << S.zone_name;
 					was_running[i] = false;

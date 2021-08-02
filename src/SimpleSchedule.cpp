@@ -25,10 +25,6 @@ bool SimpleSetting::shouldActivate()
 	auto end = start_time + duration;
 	return (enabled and isBetween(start_time, cur, end)) or manually_running;
 }
-bool SimpleSetting::shouldDeactivate()
-{
-	return !shouldActivate() and !manually_running;
-}
 std::string generateLabel(const SimpleSetting& ss, std::string target, std::string text)
 {
 	return "<label for='" + ss.zone_name + target + "'>" + text + "</label>\n";

@@ -19,7 +19,6 @@ struct SimpleSetting {
 	SimpleSetting(Args&&... zn) : zone_name(zn...) {}
 
 	bool shouldActivate();
-	bool shouldDeactivate();
 	std::string generateLayout();
 	std::string generateUpdateJS();
 	void setRouting(crow::SimpleApp& app);
