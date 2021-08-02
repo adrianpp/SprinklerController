@@ -1,6 +1,8 @@
 #ifndef TIME_SCHEDULE_HH__
 #define TIME_SCHEDULE_HH__
 
+#include <ostream>
+
 struct TimeSchedule {
 	int hour; //24 hour time, starting at midnight
 	int minute;
@@ -26,7 +28,7 @@ struct TimeSchedule {
 	}
 };
 
-TimeSchedule operator + (const TimeSchedule& lhs, const TimeSchedule& rhs)
+inline TimeSchedule operator + (const TimeSchedule& lhs, const TimeSchedule& rhs)
 {
 	auto hour = lhs.hour + rhs.hour;
 	auto minute = lhs.minute + rhs.minute;
@@ -36,7 +38,7 @@ TimeSchedule operator + (const TimeSchedule& lhs, const TimeSchedule& rhs)
 	return {hour,minute};
 }
 
-bool isBetween(TimeSchedule start, TimeSchedule cur, TimeSchedule end)
+inline bool isBetween(TimeSchedule start, TimeSchedule cur, TimeSchedule end)
 {
 	if( start <= end )
 	{
