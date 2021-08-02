@@ -1,5 +1,6 @@
 # generated folders
 /build
+/crow
 
 # vim swap fiel
 *.swp

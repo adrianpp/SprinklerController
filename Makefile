@@ -13,7 +13,10 @@ OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)
 DEPENDENCIES \
 	:= $(OBJECTS:.o=.d)
 
-all: build $(APP_DIR)/$(TARGET)
+all: crow build $(APP_DIR)/$(TARGET)
+
+crow:
+	git clone https://github.com/crowcpp/crow.git
 
 $(OBJ_DIR)/%.o: %.cpp
 	@mkdir -p $(@D)
