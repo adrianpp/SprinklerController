@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		<title>{{title}}</title>
+		<style>
+			body {
+				background:#AAAAAA;
+				border:2px;
+				position:absolute;
+				height:100%;
+				width:100%;
+				font-size:5vw
+			}
+			input {
+				font-size:5vw;
+			}
+			input[type=checkbox] {
+				transform: scale(4);
+				margin: 30px;
+			}
+			button {
+				font-size:5vw;
+			}
+		</style>
+	</head>
+	<body>
+		{{{layout}}}
+		<script>
+
+			$(document).ready(function(){
+
+				function initZone(zone) {
+					$('#' + zone + '_enabled').click(function(){
+						$.get('/'+zone+'/toggle_enabled');
+						updateZone(zone);
+					});
+					$('#' + zone + '_start').change(function(){
+						var time = $('#'+zone+'_start').val().match( /(\d+)(?::(\d\d))?\s*(p?)/ );
+						$.get('/'+zone+'/change_start_time', {hour: time[1], minute: time[2]});
+						updateZone(zone);
+					});
+					$('#' + zone + '_duration_hour').change(function(){
+						$.get('/'+zone+'/change_duration', {hour: $('#'+zone+'_duration_hour').val(), minute: $('#'+zone+'_duration_minute').val()});
+						updateZone(zone);
+					});
+					$('#' + zone + '_duration_minute').change(function(){
+						$.get('/'+zone+'/change_duration', {hour: $('#'+zone+'_duration_hour').val(), minute: $('#'+zone+'_duration_minute').val()});
+						updateZone(zone);
+					});
+					$('#' + zone + '_running').click(function(){
+						$.get('/'+zone+'/toggle_running');
+						updateZone(zone);
+					});
+					updateZone(zone);
+				}
+				function updateZone(zone) {
+					$.getJSON('/'+zone+'/settings',function(data){
+						$('#'+zone+'_enabled').prop('checked', data.enabled);
+						$('#'+zone+'_start').prop('value', data.start_time.hour+":"+data.start_time.minute);
+						var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+						if( /android/i.test(userAgent) ) {
+							$('label[for='+zone+'_start]').html("Start Time: " + data.start_time.hour + ":" + data.start_time.minute);
+						}
+						$('#'+zone+'_duration_hour').prop('value', data.duration.hour);
+						$('#'+zone+'_duration_minute').prop('value', data.duration.minute);
+						if( data.running )
+							$('#'+zone+'_running').css('color', 'green');
+						else
+							$('#'+zone+'_running').css('color', 'red');
+					});
+				}
+
+				{{{update_js}}}
+
+			}); // close document.ready()
+		</script>
+	</body>
+</html>
