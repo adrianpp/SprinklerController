@@ -153,8 +153,8 @@ int main()
         return crow::mustache::load("default.html").render(ctx);
     });
 	std::thread t1([&](){
-		bool was_running[4] = {false,false,false,false};
-		[[maybe_unused]] const int pin_num[4] = {0,1,2,3};
+		bool was_running[SimpleSchedule::NUM_ZONES] = {false};
+		[[maybe_unused]] const int pin_num[SimpleSchedule::NUM_ZONES] = {0,1,2,3};
 		while(true) {
 			int i = 0;
 			for(auto& S : schedule.settings)
